@@ -1,0 +1,20 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t my-app .
+      - name: Test container
+        run: |
+          docker run -d -p 8080:80 --name test-container my-app
+          sleep 2
+          curl -f http://localhost:8080
+          docker stop test-container
+          docker rm test-container

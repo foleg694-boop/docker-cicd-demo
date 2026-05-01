@@ -9,12 +9,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Build Docker image
         run: docker build -t my-app .
-      - name: Test container
+      
+      - name: Run container
         run: |
           docker run -d -p 8080:80 --name test-container my-app
           sleep 2
-          curl -f http://localhost:8080
+      
+      - name: Test homepage content
+        run: |
+          curl -f http://localhost:8080 | grep -q "CI/CD"
+          echo "✅ Контент проверен!"
+      
+      - name: Cleanup
+        run: |
           docker stop test-container
           docker rm test-container

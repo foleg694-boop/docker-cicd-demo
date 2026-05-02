@@ -37,6 +37,31 @@ jobs:
             echo "❌ Заголовок не найден!"
             exit 1
           fi
+           name: Send Telegram notification on success
+        if: success()
+        uses: cbrgm/telegram-github-action@v1
+        with:
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          message: |
+            ✅ CI/CD Pipeline успешно завершен!
+            Репозиторий: ${{ github.repository }}
+            Коммит: ${{ github.sha }}
+            Автор: ${{ github.actor }}
+            Смотреть: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      
+      - name: Send Telegram notification on failure
+        if: failure()
+        uses: cbrgm/telegram-github-action@v1
+        with:
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          message: |
+            ❌ CI/CD Pipeline провален!
+            Репозиторий: ${{ github.repository }}
+            Коммит: ${{ github.sha }}
+            Автор: ${{ github.actor }}
+            Логи: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
       - name: Cleanup
         run: |
           docker stop test-container

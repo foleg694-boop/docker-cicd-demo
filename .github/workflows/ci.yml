@@ -18,10 +18,17 @@ jobs:
           docker run -d -p 8080:80 --name test-container my-app
           sleep 2
       
-      - name: Test homepage
+      - name: Check server is alive
+        run: curl -f http://localhost:8080
+      
+      - name: Check specific phrase
         run: |
-          curl -f http://localhost:8080
-          echo "✅ Тест пройден!"
+          if curl -s http://localhost:8080 | grep -q "Уникальная-фраза-для-теста-12345"; then
+            echo "✅ Фраза найдена! Тест пройден."
+          else
+            echo "❌ Фраза не найдена! Тест провален."
+            exit 1
+          fi
       
       - name: Cleanup
         run: |

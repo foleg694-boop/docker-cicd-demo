@@ -23,7 +23,7 @@ jobs:
       
       - name: Check specific phrase
         run: |
-          if curl -s http://localhost:8080 | grep -q "Уникальная-фраза-для-теста-12345"; then
+          if curl -s http://localhost:8080 | grep -q "UNIQUE_PHRASE_ABC123"; then
             echo "✅ Фраза найдена! Тест пройден."
           else
             echo "❌ Фраза не найдена! Тест провален."
@@ -34,3 +34,4 @@ jobs:
         run: |
           docker stop test-container
           docker rm test-container
+          

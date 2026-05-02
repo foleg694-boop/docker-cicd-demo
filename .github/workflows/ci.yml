@@ -29,9 +29,16 @@ jobs:
             echo "❌ Фраза не найдена! Тест провален."
             exit 1
           fi
-      
+      - name: Check heading
+        run: |
+          if curl -s http://localhost:8080 | grep -q "Добро пожаловать"; then
+            echo "✅ Заголовок найден!"
+          else
+            echo "❌ Заголовок не найден!"
+            exit 1
+          fi
       - name: Cleanup
         run: |
           docker stop test-container
           docker rm test-container
-          
+  
